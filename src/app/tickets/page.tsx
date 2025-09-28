@@ -1,9 +1,9 @@
 import { Suspense } from "react";
+import { CardCompact } from "@/components/card-compact";
 import { Heading } from "@/components/heading";
 import { Spinner } from "@/components/spinner";
-import { TicketList } from "@/features/ticket/components/ticket-list";
-import { CardCompact } from "@/components/card-compact";
 import { TicketCreateForm } from "@/features/ticket/components/ticket-create-form";
+import { TicketList } from "@/features/ticket/components/ticket-list";
 
 // export const dynamic = "force-dynamic";
 // export const revalidate = 15;

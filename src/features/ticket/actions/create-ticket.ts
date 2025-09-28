@@ -8,7 +8,7 @@ export const createTicket = async (formData: FormData) => {
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
 
-  const createdTicket = await prisma.ticket.create({
+  await prisma.ticket.create({
     data: { title, content },
   });
 

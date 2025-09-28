@@ -2,9 +2,9 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
 
 type CardCompactProps = {
@@ -23,7 +23,11 @@ const CardCompact = ({
   footer,
 }: CardCompactProps) => {
   return (
-    <Card className="w-full max-w-[420px] self-center">
+    <Card
+      className={`w-full max-w-[420px] self-center ${
+        className ? className : ""
+      }`}
+    >
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
