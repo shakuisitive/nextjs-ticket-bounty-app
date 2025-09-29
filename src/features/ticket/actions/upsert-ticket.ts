@@ -8,11 +8,12 @@ import { z } from "zod";
 import {
   ActionState,
   fromErrorToActionState,
+  toActionState,
 } from "@/components/form/utils/to-action-state";
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
-  content: z.string().min(12).max(1024),
+  content: z.string().min(1).max(1024),
 });
 
 export const upsertTicket = async (
@@ -32,7 +33,6 @@ export const upsertTicket = async (
     });
   } catch (e) {
     return fromErrorToActionState(e, formData);
-    // return { message: "Something went wrong", payload: formData };
   }
   revalidatePath(ticketsPath());
 
@@ -40,7 +40,5 @@ export const upsertTicket = async (
     redirect(ticketPath(id));
   }
 
-  return {
-    message: "Ticket Created",
-  };
+  return toActionState("Ticket created successfully", "SUCCESS");
 };

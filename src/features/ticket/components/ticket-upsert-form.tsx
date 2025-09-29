@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { upsertTicket } from "../actions/upsert-ticket";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useActionState } from "react";
+import { FieldError } from "@/components/form/field-error";
+import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 
 /* NOTE FOR SHAKIR:
           - If we want, we can also have a hidden id input field and that will pass that id to formData.
@@ -19,7 +21,7 @@ type TicketUpsertFormTypes = { ticket?: Ticket };
 const TicketUpsertForm = ({ ticket }: TicketUpsertFormTypes) => {
   const [actionState, action] = useActionState(
     upsertTicket.bind(null, ticket?.id),
-    { message: "" }
+    EMPTY_ACTION_STATE
   );
 
   return (
@@ -33,6 +35,8 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormTypes) => {
           (actionState?.payload?.get("title") as string) ?? ticket?.title
         }
       />
+      <FieldError actionState={actionState} name="title" />
+
       <Label htmlFor="content">Content</Label>
       <Textarea
         name="content"
@@ -41,8 +45,9 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormTypes) => {
           (actionState?.payload?.get("content") as string) ?? ticket?.content
         }
       />
+      <FieldError actionState={actionState} name="content" />
+
       <SubmitButton label={ticket ? "Edit" : "Create"} />
-      {actionState.message}
     </form>
   );
 };
