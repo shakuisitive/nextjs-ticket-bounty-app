@@ -25,13 +25,23 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormTypes) => {
   return (
     <form action={action} className="flex flex-col gap-y-2">
       <Label htmlFor="title">Title</Label>
-      <Input type="text" name="title" id="title" defaultValue={ticket?.title} />
-
+      <Input
+        type="text"
+        name="title"
+        id="title"
+        defaultValue={
+          (actionState?.payload?.get("title") as string) ?? ticket?.title
+        }
+      />
       <Label htmlFor="content">Content</Label>
-      <Textarea name="content" id="content" defaultValue={ticket?.content} />
-
+      <Textarea
+        name="content"
+        id="content"
+        defaultValue={
+          (actionState?.payload?.get("content") as string) ?? ticket?.content
+        }
+      />
       <SubmitButton label={ticket ? "Edit" : "Create"} />
-
       {actionState.message}
     </form>
   );
