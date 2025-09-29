@@ -39,6 +39,10 @@ QUESTIONS TO RESOLVE LATER:
 TO INCLUDE IN THE PROJECT YOU WILL CREATE THAT YOU LEARNED FROM THIS COURSE
 - Theme Switcher from next-themes
 - Shadcn theme Customizer 
+- use useTransition. use transition can have an async function and we can await it. isPending will be true until the awaited result and entire function has run
+
+LEARNING I DID BY DOING THIS PROJECT: (to put in linkedin)
+- prisma's upsert
 
 BUGS TO FIX:
 - If we have a ticket id of 1 and we add a random character after that like 1w, 1z, it will work instead of returning no ticket found
