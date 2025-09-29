@@ -2,11 +2,12 @@ import { Suspense } from "react";
 import { CardCompact } from "@/components/card-compact";
 import { Heading } from "@/components/heading";
 import { Spinner } from "@/components/spinner";
-import { TicketCreateForm } from "@/features/ticket/components/ticket-create-form";
 import { TicketList } from "@/features/ticket/components/ticket-list";
+import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 
 // export const dynamic = "force-dynamic";
 // export const revalidate = 15;
+
 const TicketsPage = async () => {
   return (
     <div className="flex-1 flex flex-col gap-y-8">
@@ -15,7 +16,7 @@ const TicketsPage = async () => {
       <CardCompact
         title="Cricket A Ticket"
         description="A new ticket will be created"
-        content={<TicketCreateForm />}
+        content={<TicketUpsertForm />}
         className="w-full max-w-[420px] self-center"
       />
       <Suspense fallback={<Spinner />}>

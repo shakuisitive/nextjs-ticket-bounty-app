@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { CardCompact } from "@/components/card-compact";
-import { TicketUpdateForm } from "@/features/ticket/components/ticket-update-form";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
+import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 
 const TicketEditPage = async ({
   params,
@@ -21,7 +21,7 @@ const TicketEditPage = async ({
         className="w-full max-w-[440px] animate-fade-from-top"
         content={
           <>
-            <TicketUpdateForm ticket={{ ...ticket }} />
+            <TicketUpsertForm ticket={ticket} />
           </>
         }
       />
