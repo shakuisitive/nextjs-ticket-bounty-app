@@ -21,6 +21,7 @@ export const useActionFeedback = (
 
   useEffect(() => {
     if (!isUpdate) return;
+
     const { message, status } = actionState;
     if (status === "SUCCESS") {
       options.onSuccess?.({ actionState });

@@ -11,6 +11,7 @@ import { useActionState, useEffect } from "react";
 import { FieldError } from "@/components/form/field-error";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { useActionFeedback } from "@/components/form/hooks/use-action.feedback";
+import { toast } from "sonner";
 
 /* NOTE FOR SHAKIR:
           - If we want, we can also have a hidden id input field and that will pass that id to formData.
@@ -27,10 +28,18 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormTypes) => {
 
   useActionFeedback(actionState, {
     onSuccess: ({ actionState }) => {
-      console.log(`your msg is nulkl ${actionState.message}`);
+      if (actionState.message) {
+        toast.success(actionState.message);
+      }
     },
     onError: ({ actionState }) => {
-      console.log(`your msg is nulkl ${actionState.message}`);
+      const hasFieldErrors =
+        actionState.fieldError &&
+        Object.keys(actionState.fieldError).length > 0;
+
+      if (!hasFieldErrors && actionState.message) {
+        toast.error(actionState.message);
+      }
     },
   });
 
