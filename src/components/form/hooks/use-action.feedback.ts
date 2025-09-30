@@ -1,7 +1,7 @@
 "use client";
 
-import { ActionState } from "./../utils/to-action-state";
 import { useEffect, useRef } from "react";
+import { ActionState } from "./../utils/to-action-state";
 
 type OnArgs = {
   actionState: ActionState;
@@ -22,7 +22,7 @@ export const useActionFeedback = (
   useEffect(() => {
     if (!isUpdate) return;
 
-    const { message, status } = actionState;
+    const { status } = actionState;
     if (status === "SUCCESS") {
       options.onSuccess?.({ actionState });
     }

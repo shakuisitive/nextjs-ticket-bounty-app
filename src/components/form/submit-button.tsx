@@ -8,7 +8,6 @@ type SubmitButtonProps = {
 
 const SubmitButton = ({ label }: SubmitButtonProps) => {
   const { pending } = useFormStatus();
-  const ticket = {};
   return (
     <>
       <Button disabled={pending} type="submit">

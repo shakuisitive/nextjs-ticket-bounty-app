@@ -1,17 +1,16 @@
 "use client";
 
 import { Ticket } from "@prisma/client";
-import { Button } from "@/components/ui/button";
+import { useActionState } from "react";
+import { toast } from "sonner";
+import { FieldError } from "@/components/form/field-error";
+import { useActionFeedback } from "@/components/form/hooks/use-action.feedback";
+import { SubmitButton } from "@/components/form/submit-button";
+import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { upsertTicket } from "../actions/upsert-ticket";
-import { SubmitButton } from "@/components/form/submit-button";
-import { useActionState, useEffect } from "react";
-import { FieldError } from "@/components/form/field-error";
-import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
-import { useActionFeedback } from "@/components/form/hooks/use-action.feedback";
-import { toast } from "sonner";
 
 /* NOTE FOR SHAKIR:
           - If we want, we can also have a hidden id input field and that will pass that id to formData.
