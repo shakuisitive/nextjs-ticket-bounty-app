@@ -7,17 +7,24 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ticketEditPath, ticketPath } from "@/paths";
 import { deleteTicket } from "../actions/delete-ticket";
 import { TICKET_ICONS } from "../constants";
+import { toCurrencyFromCent } from "@/utils/currency";
 
 type TicketItemProps = {
   ticket: Ticket;
   isDetail?: boolean;
 };
 
-const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
+const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
   const detailButton = (
     <Button variant="outline" size="icon" asChild>
       <Link prefetch href={ticketPath(ticket.id)}>
@@ -27,8 +34,8 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
   );
 
   const editButton = (
-    <Button asChild variant="outline" size="icon">
-      <Link prefetch href={`${ticketEditPath(ticket.id)}`}>
+    <Button variant="outline" size="icon" asChild>
+      <Link prefetch href={ticketEditPath(ticket.id)}>
         <LucidePencil className="h-4 w-4" />
       </Link>
     </Button>
@@ -65,12 +72,19 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
             {ticket.content}
           </span>
         </CardContent>
+        <CardFooter className="flex justify-between">
+          <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+          <p className="text-sm text-muted-foreground">
+            {toCurrencyFromCent(ticket.bounty)}
+          </p>
+        </CardFooter>
       </Card>
 
       <div className="flex flex-col gap-y-1">
         {isDetail ? (
           <>
-            {editButton} {deleteButton}
+            {editButton}
+            {deleteButton}
           </>
         ) : (
           <>
