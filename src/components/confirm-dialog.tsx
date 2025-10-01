@@ -9,25 +9,34 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { cloneElement, useState } from "react";
 import { ActionState } from "./form/utils/to-action-state";
 import { Button } from "./ui/button";
 
-type ConfirmDialogProps = {
+type UseConfirmDialogProps = {
   action: (payload: FormData) => void;
   trigger: React.ReactElement;
   title?: string;
   description?: string;
 };
 
-const ConfirmDialog = ({
+const useConfirmDialog = ({
   action,
   trigger,
   title,
   description,
-}: ConfirmDialogProps) => {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+}: UseConfirmDialogProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const dialogTrigger = cloneElement(trigger, {
+    onClick: () => setIsOpen((state) => !state),
+  });
+
+  // const dialogTrigger = (
+  //   <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+  // );
+  const dialog = (
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
@@ -49,6 +58,8 @@ const ConfirmDialog = ({
       </AlertDialogContent>
     </AlertDialog>
   );
+
+  return [dialogTrigger, dialog];
 };
 
-export default ConfirmDialog;
+export { useConfirmDialog };
