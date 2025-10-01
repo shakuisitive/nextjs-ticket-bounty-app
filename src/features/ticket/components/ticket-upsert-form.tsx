@@ -1,7 +1,7 @@
 "use client";
 
 import { Ticket } from "@prisma/client";
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import { toast } from "sonner";
 import { FieldError } from "@/components/form/field-error";
 import { useActionFeedback } from "@/components/form/hooks/use-action-feedback";
@@ -12,8 +12,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { upsertTicket } from "../actions/upsert-ticket";
 import { fromCent } from "@/utils/currency";
-import { DatePicker } from "@/components/date-picker";
+import { DatePicker, ImperativeHandleFromDatePicker } from "@/components/date-picker";
 import { Form } from "@/components/form/form";
+
 
 /* NOTE FOR SHAKIR:
           - If we want, we can also have a hidden id input field and that will pass that id to formData.
@@ -23,17 +24,15 @@ import { Form } from "@/components/form/form";
 type TicketUpsertFormTypes = { ticket?: Ticket };
 
 const TicketUpsertForm = ({ ticket }: TicketUpsertFormTypes) => {
-  // const [date, setDate] = useState<Date | undefined>(
-  //   defaultValue ? new Date(defaultValue) : new Date()
-  // );
-
   const [actionState, action] = useActionState(
     upsertTicket.bind(null, ticket?.id),
     EMPTY_ACTION_STATE
   );
 
+  const datePickerImperativeHandleRef = useRef<ImperativeHandleFromDatePicker>(null);
+
   const handleSuccess = () => {
-    alert(true);
+    datePickerImperativeHandleRef.current?.reset()
   };
 
   return (
@@ -70,6 +69,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormTypes) => {
               (actionState.payload?.get("deadline") as string) ??
               ticket?.deadline
             }
+            imperativeHandleRef={datePickerImperativeHandleRef}
           />
           <FieldError actionState={actionState} name="deadline" />
         </div>
