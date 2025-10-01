@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { upsertTicket } from "../actions/upsert-ticket";
 import { fromCent } from "@/utils/currency";
 import { DatePicker } from "@/components/date-picker";
+import { Form } from "@/components/form/form";
 
 /* NOTE FOR SHAKIR:
           - If we want, we can also have a hidden id input field and that will pass that id to formData.
@@ -31,25 +32,12 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormTypes) => {
     EMPTY_ACTION_STATE
   );
 
-  useActionFeedback(actionState, {
-    onSuccess: ({ actionState }) => {
-      if (actionState.message) {
-        toast.success(actionState.message);
-      }
-    },
-    onError: ({ actionState }) => {
-      const hasFieldErrors =
-        actionState.fieldError &&
-        Object.keys(actionState.fieldError).length > 0;
-
-      if (!hasFieldErrors && actionState.message) {
-        toast.error(actionState.message);
-      }
-    },
-  });
+  const handleSuccess = () => {
+    alert(true);
+  };
 
   return (
-    <form action={action} className="flex flex-col gap-y-2">
+    <Form action={action} actionState={actionState} onSuccess={handleSuccess}>
       <Label htmlFor="title">Title</Label>
       <Input
         type="text"
@@ -74,15 +62,6 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormTypes) => {
       <div className="flex gap-x-2 mb-1">
         <div className="w-1/2">
           <Label htmlFor="deadline">Deadline</Label>
-          {/* <Input
-            id="deadline"
-            name="deadline"
-            type="date"
-            defaultValue={
-              (actionState.payload?.get("deadline") as string) ??
-              ticket?.deadline
-            }
-          /> */}
           <DatePicker
             key={actionState.timestamps}
             id="deadline"
@@ -111,7 +90,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormTypes) => {
       </div>
 
       <SubmitButton label={ticket ? "Edit" : "Create"} />
-    </form>
+    </Form>
   );
 };
 
