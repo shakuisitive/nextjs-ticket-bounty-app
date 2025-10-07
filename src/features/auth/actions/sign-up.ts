@@ -1,18 +1,18 @@
 "use server";
 
-import { ticketsPath } from "@/paths";
-import { lucia } from "@/lib/lucia";
+import { hash } from "@node-rs/argon2";
+import { Prisma } from "@prisma/client";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { z } from "zod";
 import {
   ActionState,
   fromErrorToActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
+import { lucia } from "@/lib/lucia";
 import { prisma } from "@/lib/prisma";
-import { hash } from "@node-rs/argon2";
-import { z } from "zod";
-import { cookies } from "next/headers";
-import { Prisma } from "@prisma/client";
-import { redirect } from "next/navigation";
+import { ticketsPath } from "@/paths";
 
 const signUpSchema = z
   .object({

@@ -1,8 +1,7 @@
+import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
-import { Heading } from "@/components/heading";
 import { SignUpForm } from "@/features/auth/components/sign-up-form";
 import { signInPath } from "@/paths";
-import Link from "next/link";
 
 const SignUpPage = () => {
   return (

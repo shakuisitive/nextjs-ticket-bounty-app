@@ -9,9 +9,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "./ui/button";
-import { SubmitButton } from "./form/submit-button";
 import { Form } from "./form/form";
+import { SubmitButton } from "./form/submit-button";
 import { ActionState, EMPTY_ACTION_STATE } from "./form/utils/to-action-state";
 
 type UseConfirmDialogArgs = {
@@ -50,7 +49,7 @@ const useConfirmDialog = ({
           <AlertDialogAction asChild>
             <Form
               actionState={actionState}
-              action={action}
+              action={formAction}
               onSuccess={handleSuccess}
             >
               <SubmitButton label="Confirm" />

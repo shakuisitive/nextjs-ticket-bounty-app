@@ -1,6 +1,8 @@
 "use server";
-import { ticketsPath } from "@/paths";
+import { verify } from "@node-rs/argon2";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 import {
   fromErrorToActionState,
   toActionState,
@@ -8,9 +10,7 @@ import {
 import { ActionState } from "@/components/form/utils/to-action-state";
 import { lucia } from "@/lib/lucia";
 import { prisma } from "@/lib/prisma";
-import { verify } from "@node-rs/argon2";
-import { cookies } from "next/headers";
-import { z } from "zod";
+import { ticketsPath } from "@/paths";
 
 const signInSchema = z.object({
   email: z.string().min(1, { message: "Is required" }).max(191).email(),
