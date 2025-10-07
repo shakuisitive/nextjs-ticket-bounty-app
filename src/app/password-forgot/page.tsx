@@ -1,4 +1,4 @@
-do sign up pageconst PasswordForgotPage = () => {
+const PasswordForgotPage = () => {
   return <div>PasswordForgotPage</div>;
 };
 

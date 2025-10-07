@@ -1,5 +1,6 @@
 "use server";
 
+import { ticketsPath } from "@/paths";
 import { lucia } from "@/lib/lucia";
 import {
   ActionState,
@@ -11,6 +12,7 @@ import { hash } from "@node-rs/argon2";
 import { z } from "zod";
 import { cookies } from "next/headers";
 import { Prisma } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 const signUpSchema = z
   .object({
@@ -72,12 +74,13 @@ export const signUp = async (actionState: ActionState, formData: FormData) => {
     ) {
       return toActionState(
         "ERROR",
-        "Either email or username is already in use"
+        "Either email or username is already in use",
+        formData
       );
     }
 
     return fromErrorToActionState(error, formData);
   }
 
-  return toActionState("SUCCESS", "Sign up successful");
+  redirect(ticketsPath());
 };
