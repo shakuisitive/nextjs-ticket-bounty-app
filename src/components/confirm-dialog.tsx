@@ -1,4 +1,4 @@
-import { cloneElement, useState } from "react";
+import { cloneElement, useActionState, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,11 +10,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
+import { SubmitButton } from "./form/submit-button";
+import { Form } from "./form/form";
+import { ActionState, EMPTY_ACTION_STATE } from "./form/utils/to-action-state";
 
 type UseConfirmDialogArgs = {
   title?: string;
   description?: string;
-  action: (payload: FormData) => void;
+  action: () => Promise<ActionState>;
   trigger: React.ReactElement;
 };
 
@@ -25,10 +28,15 @@ const useConfirmDialog = ({
   trigger,
 }: UseConfirmDialogArgs) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [actionState, formAction] = useActionState(action, EMPTY_ACTION_STATE);
 
   const dialogTrigger = cloneElement(trigger, {
     onClick: () => setIsOpen((state) => !state),
   });
+
+  const handleSuccess = () => {
+    setIsOpen(false);
+  };
 
   const dialog = (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -40,9 +48,13 @@ const useConfirmDialog = ({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <form action={action}>
-              <Button type="submit">Confirm</Button>
-            </form>
+            <Form
+              actionState={actionState}
+              action={action}
+              onSuccess={handleSuccess}
+            >
+              <SubmitButton label="Confirm" />
+            </Form>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
