@@ -28,7 +28,7 @@ const SignInForm = () => {
       />
       <FieldError actionState={actionState} name="password" />
 
-      <SubmitButton label="Login" />
+      <SubmitButton label="Signin" />
     </Form>
   );
 };
