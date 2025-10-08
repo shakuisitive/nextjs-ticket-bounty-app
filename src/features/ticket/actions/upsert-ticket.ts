@@ -1,5 +1,6 @@
 "use server";
 
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -9,11 +10,11 @@ import {
   fromErrorToActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
-import { getAuth } from "@/features/auth/actions/get-auth";
 import { prisma } from "@/lib/prisma";
 import { signInPath } from "@/paths";
 import { ticketPath, ticketsPath } from "@/paths";
 import { toCent } from "@/utils/currency";
+import { isOwner } from "@/features/auth/utils/is-owner";
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
@@ -27,9 +28,21 @@ export const upsertTicket = async (
   _actionState: ActionState,
   formData: FormData
 ) => {
-  const { user } = await getAuth();
+  const { user } = await getAuthOrRedirect();
+
   if (!user) redirect(signInPath());
   try {
+    if (id) {
+      const ticket = await prisma.ticket.findFirst({ where: { id } });
+
+      if (!ticket || !isOwner(user, ticket)) {
+        return toActionState(
+          "ERROR",
+          "You're not authorized to perform this action."
+        );
+      }
+    }
+
     const data = upsertTicketSchema.parse({
       title: formData.get("title"),
       content: formData.get("content"),

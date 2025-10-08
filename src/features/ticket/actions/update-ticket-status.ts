@@ -1,5 +1,7 @@
 "use server";
 
+import { isOwner } from "./../../auth/utils/is-owner";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { TicketStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import {
@@ -10,7 +12,17 @@ import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
 
 export const updateTicketStatus = async (id: string, status: TicketStatus) => {
+  const { user } = await getAuthOrRedirect();
   try {
+    const ticket = await prisma.ticket.findFirst({ where: { id } });
+
+    if (!ticket || !isOwner(user, ticket)) {
+      return toActionState(
+        "ERROR",
+        "You're not authorized to perform this action."
+      );
+    }
+
     await prisma.ticket.update({
       where: {
         id,

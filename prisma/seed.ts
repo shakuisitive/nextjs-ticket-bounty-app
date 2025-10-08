@@ -39,7 +39,7 @@ const seed = async () => {
   await prisma.user.deleteMany();
   await prisma.ticket.deleteMany();
 
-  const passwordHash = await hash("svai");
+  const passwordHash = await hash("shakirkhan72727@gmail.com");
 
   const [createdUser] = await prisma.user.createManyAndReturn({
     data: users.map((user) => ({ ...user, passwordHash })),
