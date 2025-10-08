@@ -1,6 +1,4 @@
 import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
-import { signInPath } from "@/paths";
-import { redirect } from "next/navigation";
 
 const AuthenticatedLayout = async ({
   children,
@@ -9,7 +7,7 @@ const AuthenticatedLayout = async ({
 }>) => {
   await getAuthOrRedirect();
 
-  return <>children</>;
+  return <>{children}</>;
 };
 
 export default AuthenticatedLayout;
