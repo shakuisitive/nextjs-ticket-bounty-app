@@ -1,6 +1,5 @@
 "use server";
 
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -10,11 +9,12 @@ import {
   fromErrorToActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { isOwner } from "@/features/auth/utils/is-owner";
 import { prisma } from "@/lib/prisma";
 import { signInPath } from "@/paths";
 import { ticketPath, ticketsPath } from "@/paths";
 import { toCent } from "@/utils/currency";
-import { isOwner } from "@/features/auth/utils/is-owner";
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
