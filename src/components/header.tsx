@@ -8,6 +8,7 @@ import { homePath, signInPath, signUpPath } from "@/paths";
 import { SubmitButton } from "./form/submit-button";
 import { ThemeSwitcher } from "./theme/theme-switcher";
 import { buttonVariants } from "./ui/button";
+import { AccountDropdown } from "./account-dropdown";
 
 const Header = () => {
   const { user, isFetched } = useAuth();
@@ -15,9 +16,10 @@ const Header = () => {
   if (!isFetched) return;
 
   const navItems = user ? (
-    <form action={signOut}>
-      <SubmitButton label="Sign Out" icon={<LucideLogOut />} />
-    </form>
+    // <form action={signOut}>
+    //   <SubmitButton label="Sign Out" icon={<LucideLogOut />} />
+    // </form>
+    <AccountDropdown user={user} />
   ) : (
     <>
       <Link
