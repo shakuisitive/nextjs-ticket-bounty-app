@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 import { cn } from "@/lib/utils";
+import { signInPath, signUpPath } from "@/paths";
+import { getActivePath } from "@/utils/get-active-path";
 import { navItems } from "../constants";
 import { SidebarItem } from "./sidebar-item";
-import { useAuth } from "@/features/auth/hooks/use-auth";
-import { usePathname } from "next/navigation";
-import { getActivePath } from "@/utils/get-active-path";
-import { signInPath, signUpPath } from "@/paths";
 
 const Sidebar = () => {
   const { user, isFetched } = useAuth();
   const pathname = usePathname();
-  const { active, activeIndex } = getActivePath(
+  const { activeIndex } = getActivePath(
     pathname,
     navItems.map((item) => item.href),
     [signInPath(), signUpPath()]
