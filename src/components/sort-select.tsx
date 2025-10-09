@@ -29,6 +29,7 @@ const SortSelect = ({ defaultValue, options }: SortSelectProps) => {
 
   const handleSort = (value: string) => {
     const params = new URLSearchParams(searchParams);
+    console.log(params.toString());
 
     if (value === "newest") {
       params.delete("sort");
