@@ -3,20 +3,19 @@
 import { Input } from "@/components/ui/input";
 import { searchParser } from "@/features/ticket/search-params";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
 
 type SearchInputProps = {
   placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
 };
 
-const SearchInput = ({ placeholder }: SearchInputProps) => {
-  const [search, setSearch] = useQueryState("search", searchParser);
-
+const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) => {
   const handleSearch = useDebouncedCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
-      setSearch(value);
+      onChange(value);
     },
     250
   );
@@ -25,7 +24,7 @@ const SearchInput = ({ placeholder }: SearchInputProps) => {
     <Input
       onChange={handleSearch}
       placeholder={placeholder}
-      defaultValue={search || ""}
+      defaultValue={value}
     />
   );
 };
