@@ -1,8 +1,8 @@
 "use client";
 
 import { useQueryStates } from "nuqs";
-import { paginationOptions, paginationParser } from "../search-params";
 import { Pagination } from "@/components/pagination";
+import { paginationOptions, paginationParser } from "../search-params";
 const TicketPagination = () => {
   const [pagination, setPagination] = useQueryStates(
     paginationParser,

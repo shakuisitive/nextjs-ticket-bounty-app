@@ -5,12 +5,9 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useQueryState, useQueryStates } from "nuqs";
-import { sortOptions, sortParser } from "@/features/ticket/search-params";
 
 export type SortSelectOption = {
   label: string;
