@@ -1,4 +1,8 @@
-import { createSearchParamsCache, parseAsString } from "nuqs/server";
+import {
+  createSearchParamsCache,
+  parseAsString,
+  parseAsInteger,
+} from "nuqs/server";
 
 export const searchParser = parseAsString
   .withDefault("")
@@ -18,9 +22,20 @@ export const sortOptions = {
   clearOnDefault: true,
 };
 
+export const paginationParser = {
+  page: parseAsInteger.withDefault(0),
+  size: parseAsInteger.withDefault(2),
+};
+
+export const paginationOptions = {
+  shallow: false,
+  clearOnDefault: true,
+};
+
 export const searchParamsCache = createSearchParamsCache({
   search: searchParser,
   ...sortParser,
+  ...paginationParser,
 });
 
 export type ParsedSearchParams = ReturnType<typeof searchParamsCache.parse>;
