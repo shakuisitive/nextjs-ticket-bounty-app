@@ -2,13 +2,17 @@ import { CardCompact } from "@/components/card-compact";
 import { getComments } from "../queries/get-comments";
 import { CommentCreateForm } from "./comment-create-form";
 import { CommentItem } from "./comment-item";
+import { CommentDeleteButton } from "./comment-delete-button";
+import { getAuth } from "@/features/auth/actions/get-auth";
+import { isOwner } from "@/features/auth/utils/is-owner";
 
 type CommentsProps = {
   ticketId: string;
 };
 
-export const Comments = async ({ ticketId }: CommentsProps) => {
+const Comments = async ({ ticketId }: CommentsProps) => {
   const comments = await getComments(ticketId);
+  const { user } = await getAuth();
 
   return (
     <>
@@ -19,9 +23,19 @@ export const Comments = async ({ ticketId }: CommentsProps) => {
       />
       <div className="flex flex-col gap-y-2 ml-">
         {comments?.map((comment) => (
-          <CommentItem key={comment.id} comment={comment} />
+          <CommentItem
+            key={comment.id}
+            comment={comment}
+            buttons={[
+              ...(isOwner(user, comment)
+                ? [<CommentDeleteButton key="0" id={comment.id} />]
+                : []),
+            ]}
+          />
         ))}
       </div>
     </>
   );
 };
+
+export { Comments };
