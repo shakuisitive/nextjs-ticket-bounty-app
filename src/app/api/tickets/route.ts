@@ -1,5 +1,5 @@
-import { searchParamsCache } from "@/features/ticket/search-params";
 import { getTickets } from "@/features/ticket/queries/get-tickets";
+import { searchParamsCache } from "@/features/ticket/search-params";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
