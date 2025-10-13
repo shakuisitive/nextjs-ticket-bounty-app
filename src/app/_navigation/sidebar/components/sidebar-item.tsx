@@ -27,10 +27,11 @@ const SidebarItem = ({ isOpen, navItem, isActive }: SidebarItemProps) => {
         {cloneElement(navItem.icon, {
           className: "h-5 w-5",
         })}
+
         <span
           className={cn(
             "absolute left-12 text-base duration-200",
-            isOpen ? "md:block hidden" : "w-[78px]",
+            isOpen ? "block" : "hidden",
             !isOpen && closedClassName
           )}
         >
