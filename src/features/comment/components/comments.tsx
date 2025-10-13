@@ -21,7 +21,7 @@ const Comments = async ({ ticketId }: CommentsProps) => {
         description="A new comment will be created"
         content={<CommentCreateForm ticketId={ticketId} />}
       />
-      <div className="flex flex-col gap-y-2 ml-">
+      <div className="flex flex-col gap-y-2 ml-8">
         {comments?.map((comment) => (
           <CommentItem
             key={comment.id}
