@@ -9,6 +9,7 @@ import { getAuth } from "@/features/auth/actions/get-auth";
 import { isOwner } from "@/features/auth/utils/is-owner";
 import { CommentWithMetadata } from "../types";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 type CommentsProps = {
   ticketId: string;
@@ -19,11 +20,16 @@ type CommentsProps = {
 };
 
 const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
-  const comments = paginatedComments.list;
+  const [comments, setComments] = useState(paginatedComments.list);
 
   const handleMore = async () => {
     const morePaginatedComments = await getComments(ticketId);
     const moreComments = morePaginatedComments.list;
+
+    setComments((currentListOfComment) => [
+      ...currentListOfComment,
+      ...moreComments,
+    ]);
   };
 
   return (
