@@ -1,3 +1,5 @@
+"use client";
+
 import { CardCompact } from "@/components/card-compact";
 import { getComments } from "../queries/get-comments";
 import { CommentCreateForm } from "./comment-create-form";
@@ -6,6 +8,7 @@ import { CommentDeleteButton } from "./comment-delete-button";
 import { getAuth } from "@/features/auth/actions/get-auth";
 import { isOwner } from "@/features/auth/utils/is-owner";
 import { CommentWithMetadata } from "../types";
+import { Button } from "@/components/ui/button";
 
 type CommentsProps = {
   ticketId: string;
@@ -13,6 +16,11 @@ type CommentsProps = {
 };
 
 const Comments = ({ ticketId, comments = [] }: CommentsProps) => {
+  const handleMore = async () => {
+    const result = await getComments(ticketId);
+    console.log(result);
+  };
+
   return (
     <>
       <CardCompact
@@ -20,6 +28,7 @@ const Comments = ({ ticketId, comments = [] }: CommentsProps) => {
         description="A new comment will be created"
         content={<CommentCreateForm ticketId={ticketId} />}
       />
+
       <div className="flex flex-col gap-y-2 ml-8">
         {comments.map((comment) => (
           <CommentItem
@@ -32,6 +41,12 @@ const Comments = ({ ticketId, comments = [] }: CommentsProps) => {
             ]}
           />
         ))}
+      </div>
+
+      <div className="flex flex-col justify-center ml-8">
+        <Button onClick={handleMore} variant="ghost">
+          More
+        </Button>
       </div>
     </>
   );
