@@ -31,7 +31,7 @@ import { CommentWithMetadata } from "@/features/comment/types";
 type TicketItemProps = {
   ticket: { isOwner: Boolean } & TicketWithMetadata;
   isDetail?: boolean;
-  comments?: CommentWithMetadata[];
+  comments?: React.ReactNode;
 };
 
 const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
@@ -111,7 +111,7 @@ const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
           )}
         </div>
       </div>
-      {isDetail ? <Comments comments={comments} ticketId={ticket.id} /> : null}
+      {comments}
     </div>
   );
 };
