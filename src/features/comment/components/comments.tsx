@@ -5,13 +5,14 @@ import { CommentItem } from "./comment-item";
 import { CommentDeleteButton } from "./comment-delete-button";
 import { getAuth } from "@/features/auth/actions/get-auth";
 import { isOwner } from "@/features/auth/utils/is-owner";
+import { CommentWithMetadata } from "../types";
 
 type CommentsProps = {
   ticketId: string;
+  comments?: CommentWithMetadata[];
 };
 
-const Comments = async ({ ticketId }: CommentsProps) => {
-  const comments = await getComments(ticketId);
+const Comments = async ({ ticketId, comments = [] }: CommentsProps) => {
   const { user } = await getAuth();
 
   return (
@@ -22,7 +23,7 @@ const Comments = async ({ ticketId }: CommentsProps) => {
         content={<CommentCreateForm ticketId={ticketId} />}
       />
       <div className="flex flex-col gap-y-2 ml-8">
-        {comments?.map((comment) => (
+        {comments.map((comment) => (
           <CommentItem
             key={comment.id}
             comment={comment}
