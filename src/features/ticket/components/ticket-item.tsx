@@ -1,3 +1,5 @@
+"use client";
+
 import clsx from "clsx";
 import {
   LucideArrowUpRightFromSquare,
@@ -27,16 +29,12 @@ import { Skeleton } from "@/components/skeleton";
 import { CommentWithMetadata } from "@/features/comment/types";
 
 type TicketItemProps = {
-  ticket: TicketWithMetadata;
+  ticket: { isOwner: Boolean } & TicketWithMetadata;
   isDetail?: boolean;
   comments?: CommentWithMetadata[];
 };
 
-const TicketItem = async ({ ticket, isDetail, comments }: TicketItemProps) => {
-  const { user } = await getAuthOrRedirect();
-
-  const isTicketOwner = isOwner(user, ticket);
-
+const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
   const detailButton = (
     <Button variant="outline" size="icon" asChild>
       <Link prefetch href={ticketPath(ticket.id)}>
@@ -45,7 +43,7 @@ const TicketItem = async ({ ticket, isDetail, comments }: TicketItemProps) => {
     </Button>
   );
 
-  const editButton = isTicketOwner && (
+  const editButton = ticket.isOwner && (
     <Button variant="outline" size="icon" asChild>
       <Link prefetch href={ticketEditPath(ticket.id)}>
         <LucidePencil className="h-4 w-4" />
@@ -53,7 +51,7 @@ const TicketItem = async ({ ticket, isDetail, comments }: TicketItemProps) => {
     </Button>
   );
 
-  const moreMenu = isTicketOwner && (
+  const moreMenu = ticket.isOwner && (
     <TicketMoreMenu
       ticket={ticket}
       trigger={

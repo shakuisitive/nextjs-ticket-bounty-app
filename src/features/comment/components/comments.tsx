@@ -12,9 +12,7 @@ type CommentsProps = {
   comments?: CommentWithMetadata[];
 };
 
-const Comments = async ({ ticketId, comments = [] }: CommentsProps) => {
-  const { user } = await getAuth();
-
+const Comments = ({ ticketId, comments = [] }: CommentsProps) => {
   return (
     <>
       <CardCompact
@@ -28,7 +26,7 @@ const Comments = async ({ ticketId, comments = [] }: CommentsProps) => {
             key={comment.id}
             comment={comment}
             buttons={[
-              ...(isOwner(user, comment)
+              ...(comment.isOwner
                 ? [<CommentDeleteButton key="0" id={comment.id} />]
                 : []),
             ]}
