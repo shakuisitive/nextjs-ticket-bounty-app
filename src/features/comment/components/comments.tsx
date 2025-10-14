@@ -12,13 +12,18 @@ import { Button } from "@/components/ui/button";
 
 type CommentsProps = {
   ticketId: string;
-  comments?: CommentWithMetadata[];
+  paginatedComments: {
+    list: CommentWithMetadata[];
+    metadata: { count: number; hasNextPage: boolean };
+  };
 };
 
-const Comments = ({ ticketId, comments = [] }: CommentsProps) => {
+const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
+  const comments = paginatedComments.list;
+
   const handleMore = async () => {
-    const result = await getComments(ticketId);
-    console.log(result);
+    const morePaginatedComments = await getComments(ticketId);
+    const moreComments = morePaginatedComments.list;
   };
 
   return (
