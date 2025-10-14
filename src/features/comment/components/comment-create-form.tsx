@@ -4,20 +4,33 @@ import { useActionState } from "react";
 import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
-import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
+import {
+  ActionState,
+  EMPTY_ACTION_STATE,
+} from "@/components/form/utils/to-action-state";
 import { Textarea } from "@/components/ui/textarea";
 import { createComment } from "../actions/create-comment";
+import { CommentWithMetadata } from "../types";
 
 type CommentCreateFormProps = {
   ticketId: string;
+  onCreateContent?: (comment: CommentWithMetadata) => void;
 };
-const CommentCreateForm = ({ ticketId }: CommentCreateFormProps) => {
+const CommentCreateForm = ({
+  ticketId,
+  onCreateContent,
+}: CommentCreateFormProps) => {
   const [actionState, action] = useActionState(
     createComment.bind(null, ticketId),
     EMPTY_ACTION_STATE
   );
+
+  const handleSuccess = (actionState: ActionState) => {
+    onCreateContent?.(actionState.data as CommentWithMetadata);
+  };
+
   return (
-    <Form actionState={actionState} action={action}>
+    <Form actionState={actionState} action={action} onSuccess={handleSuccess}>
       <Textarea name="content" />
       <FieldError actionState={actionState} name="content" />
       <SubmitButton label="Comment" />

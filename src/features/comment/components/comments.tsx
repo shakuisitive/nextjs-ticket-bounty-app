@@ -1,15 +1,13 @@
 "use client";
 
-import { CardCompact } from "@/components/card-compact";
-import { getComments } from "../queries/get-comments";
-import { CommentCreateForm } from "./comment-create-form";
-import { CommentItem } from "./comment-item";
-import { CommentDeleteButton } from "./comment-delete-button";
-import { getAuth } from "@/features/auth/actions/get-auth";
-import { isOwner } from "@/features/auth/utils/is-owner";
-import { CommentWithMetadata } from "../types";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { CardCompact } from "@/components/card-compact";
+import { Button } from "@/components/ui/button";
+import { getComments } from "../queries/get-comments";
+import { CommentWithMetadata } from "../types";
+import { CommentCreateForm } from "./comment-create-form";
+import { CommentDeleteButton } from "./comment-delete-button";
+import { CommentItem } from "./comment-item";
 
 type CommentsProps = {
   ticketId: string;
@@ -41,12 +39,21 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
     );
   };
 
+  const handleCreateComment = (comment: CommentWithMetadata) => {
+    setComments((prevComments) => [comment, ...prevComments]);
+  };
+
   return (
     <>
       <CardCompact
         title="Create comment"
         description="A new comment will be created"
-        content={<CommentCreateForm ticketId={ticketId} />}
+        content={
+          <CommentCreateForm
+            ticketId={ticketId}
+            onCreateContent={handleCreateComment}
+          />
+        }
       />
 
       <div className="flex flex-col gap-y-2 ml-8">

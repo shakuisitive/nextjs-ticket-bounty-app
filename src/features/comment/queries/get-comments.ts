@@ -1,7 +1,7 @@
 "use server";
 
-import { isOwner } from "@/features/auth/utils/is-owner";
 import { getAuth } from "@/features/auth/actions/get-auth";
+import { isOwner } from "@/features/auth/utils/is-owner";
 import { prisma } from "@/lib/prisma";
 
 export const getComments = async (ticketId: string, offset?: number) => {

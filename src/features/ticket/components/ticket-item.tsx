@@ -15,21 +15,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
-import { isOwner } from "@/features/auth/utils/is-owner";
-import { Comments } from "@/features/comment/components/comments";
 import { ticketEditPath, ticketPath } from "@/paths";
 import { toCurrencyFromCent } from "@/utils/currency";
 import { TICKET_ICONS } from "../constants";
 import { TicketWithMetadata } from "../types";
 import { TicketMoreMenu } from "./ticket-more-menu";
-import { Suspense } from "react";
-import { Spinner } from "@/components/spinner";
-import { Skeleton } from "@/components/skeleton";
-import { CommentWithMetadata } from "@/features/comment/types";
 
 type TicketItemProps = {
-  ticket: { isOwner: Boolean } & TicketWithMetadata;
+  ticket: { isOwner: boolean } & TicketWithMetadata;
   isDetail?: boolean;
   comments?: React.ReactNode;
 };
