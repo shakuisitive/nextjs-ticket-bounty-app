@@ -26,7 +26,7 @@ type UseConfirmDialogArgs = {
   title?: string;
   description?: string;
   action: () => Promise<ActionState>;
-  trigger: React.ReactElement;
+  trigger: (isPending: boolean) => React.ReactElement | React.ReactElement;
   onSuccess?: (actionState: ActionState) => void;
 };
 
@@ -43,6 +43,13 @@ const useConfirmDialog = ({
     EMPTY_ACTION_STATE
   );
 
+  const dialogTrigger = cloneElement(
+    typeof trigger === "function" ? trigger(isPending) : trigger,
+    {
+      onClick: () => setIsOpen((state) => !state),
+    }
+  );
+
   const toastRef = useRef<string | number | null>(null);
 
   useEffect(() => {
@@ -56,10 +63,6 @@ const useConfirmDialog = ({
       toastRef.current && toast.dismiss(toastRef.current);
     };
   }, [isPending]);
-
-  const dialogTrigger = cloneElement(trigger, {
-    onClick: () => setIsOpen((state) => !state),
-  });
 
   useActionFeedback(actionState, {
     onSuccess: ({ actionState }) => {

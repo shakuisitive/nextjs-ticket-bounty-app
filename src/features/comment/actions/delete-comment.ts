@@ -11,8 +11,6 @@ import { prisma } from "@/lib/prisma";
 import { ticketPath } from "@/paths";
 
 export const deleteComment = async (id: string) => {
-  await new Promise((r) => setTimeout(r, 2000));
-
   const { user } = await getAuthOrRedirect();
 
   const comment = await prisma.comment.findUnique({ where: { id } });
