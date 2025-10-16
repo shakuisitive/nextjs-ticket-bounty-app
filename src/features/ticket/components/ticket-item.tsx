@@ -22,7 +22,7 @@ import { TicketWithMetadata } from "../types";
 import { TicketMoreMenu } from "./ticket-more-menu";
 
 type TicketItemProps = {
-  ticket: { isOwner: boolean } & TicketWithMetadata;
+  ticket: TicketWithMetadata;
   isDetail?: boolean;
   comments?: React.ReactNode;
 };

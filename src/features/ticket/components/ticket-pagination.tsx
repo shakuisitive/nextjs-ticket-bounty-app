@@ -8,12 +8,11 @@ import {
   paginationParser,
   searchParser,
 } from "../search-params";
+import { PaginatedData } from "@/types/pagination";
+import { TicketWithMetadata } from "../types";
 
 type TicketPaginationProps = {
-  paginatedTicketMetadata: {
-    count: number;
-    hasNextPage: boolean;
-  };
+  paginatedTicketMetadata: PaginatedData<TicketWithMetadata>["metadata"];
 };
 
 const TicketPagination = ({
