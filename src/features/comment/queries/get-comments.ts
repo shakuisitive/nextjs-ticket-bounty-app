@@ -17,11 +17,11 @@ export const getComments = async (ticketId: string, cursor?: string) => {
   // const skip = offset ?? 0;
   const take = 2;
 
-  const [comments, count] = await prisma.$transaction([
+  let [comments, count] = await prisma.$transaction([
     prisma.comment.findMany({
       where,
       // skip,
-      take,
+      take: take + 1,
       include: {
         user: {
           select: {
@@ -36,6 +36,9 @@ export const getComments = async (ticketId: string, cursor?: string) => {
     }),
   ]);
 
+  const hasNextPage = comments.length > take;
+  comments = hasNextPage ? comments.slice(0, -1) : comments;
+
   return {
     list: comments.map((comment) => ({
       ...comment,
@@ -44,7 +47,7 @@ export const getComments = async (ticketId: string, cursor?: string) => {
     metadata: {
       count,
       // hasNextPage: count > skip + take,
-      hasNextPage: true,
+      hasNextPage,
       cursor: comments.at(-1)?.id,
     },
   };
