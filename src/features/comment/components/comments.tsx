@@ -13,16 +13,16 @@ type CommentsProps = {
   ticketId: string;
   paginatedComments: {
     list: CommentWithMetadata[];
-    metadata: { count: number; hasNextPage: boolean };
+    metadata: { count: number; hasNextPage: boolean; cursor?: number };
   };
 };
 
 const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
   const [comments, setComments] = useState(paginatedComments.list);
-  const [metaData, setMetaData] = useState(paginatedComments.metadata);
+  const [metadata, setMetadata] = useState(paginatedComments.metadata);
 
   const handleMore = async () => {
-    const morePaginatedComments = await getComments(ticketId, comments.length);
+    const morePaginatedComments = await getComments(ticketId, metadata.cursor);
     const moreComments = morePaginatedComments.list;
 
     setComments((currentListOfComment) => [
@@ -30,7 +30,7 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
       ...moreComments,
     ]);
 
-    setMetaData(morePaginatedComments.metadata);
+    setMetadata(morePaginatedComments.metadata);
   };
 
   const handleDeleteComment = (id: string) => {
@@ -78,7 +78,7 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
         ))}
       </div>
 
-      {metaData.hasNextPage && (
+      {metadata.hasNextPage && (
         <div className="flex flex-col justify-center ml-8">
           <Button onClick={handleMore} variant="ghost">
             More
