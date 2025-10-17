@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
 import { getComments } from "../queries/get-comments";
@@ -10,6 +9,7 @@ import { CommentDeleteButton } from "./comment-delete-button";
 import { CommentItem } from "./comment-item";
 import { PaginatedData } from "@/types/pagination";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { metadata } from "@/app/layout";
 
 type CommentsProps = {
   ticketId: string;
@@ -24,12 +24,18 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
       initialPageParam: undefined as string | undefined,
       getNextPageParam: (lastPage) =>
         lastPage.metadata.hasNextPage ? lastPage.metadata.cursor : undefined,
+      initialData: {
+        pages: [
+          {
+            list: paginatedComments.list,
+            metadata: paginatedComments.metadata,
+          },
+        ],
+        pageParams: [undefined],
+      },
     });
 
-  // const [comments, setComments] = useState(paginatedComments.list);
-  // const [metadata, setMetadata] = useState(paginatedComments.metadata);
-
-  const comments = data?.pages.flatMap((page) => page.list) ?? [];
+  const comments = data.pages.flatMap((page) => page.list);
 
   const handleMore = () => fetchNextPage();
 
