@@ -8,12 +8,9 @@ import { CommentCreateForm } from "./comment-create-form";
 import { CommentDeleteButton } from "./comment-delete-button";
 import { CommentItem } from "./comment-item";
 import { PaginatedData } from "@/types/pagination";
-import {
-  QueryClient,
-  useInfiniteQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { metadata } from "@/app/layout";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
 type CommentsProps = {
   ticketId: string;
@@ -43,13 +40,19 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
 
   const comments = data.pages.flatMap((page) => page.list);
 
-  const handleMore = () => fetchNextPage();
-
   const queryClient = useQueryClient();
 
   const handleDeleteComment = () => queryClient.invalidateQueries({ queryKey });
 
   const handleCreateComment = () => queryClient.invalidateQueries({ queryKey });
+
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage]);
 
   return (
     <>
@@ -84,17 +87,11 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
         ))}
       </div>
 
-      {hasNextPage && (
-        <div className="flex flex-col justify-center ml-8">
-          <Button
-            onClick={handleMore}
-            variant="ghost"
-            disabled={isFetchingNextPage}
-          >
-            More
-          </Button>
-        </div>
-      )}
+      <div ref={ref}>
+        {!hasNextPage && (
+          <p className="text-right text-xs italic"> No more comments </p>
+        )}
+      </div>
     </>
   );
 };
