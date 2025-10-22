@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,18 +16,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Form } from "./form/form";
-import { SubmitButton } from "./form/submit-button";
+import { useActionFeedback } from "./form/hooks/use-action-feedback";
 import { ActionState, EMPTY_ACTION_STATE } from "./form/utils/to-action-state";
 import { Button } from "./ui/button";
-import { toast } from "sonner";
-import { useActionFeedback } from "./form/hooks/use-action-feedback";
 
 type UseConfirmDialogArgs = {
   title?: string;
   description?: string;
   action: () => Promise<ActionState>;
-  trigger: (isPending: boolean) => React.ReactElement | React.ReactElement;
+  trigger: React.ReactElement | ((isPending: boolean) => React.ReactElement);
   onSuccess?: (actionState: ActionState) => void;
 };
 
@@ -60,7 +58,9 @@ const useConfirmDialog = ({
     }
 
     return () => {
-      toastRef.current && toast.dismiss(toastRef.current);
+      if (toastRef.current) {
+        toast.dismiss(toastRef.current);
+      }
     };
   }, [isPending]);
 

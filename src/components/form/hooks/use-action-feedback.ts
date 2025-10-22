@@ -1,18 +1,18 @@
 import { useEffect, useRef } from "react";
 import { ActionState } from "@/components/form/utils/to-action-state";
 
-type OnArgs = {
-  actionState: ActionState;
+type OnArgs<T = unknown> = {
+  actionState: ActionState<T>;
 };
 
-type UseActionFeedbackOptions = {
-  onSuccess?: (onArgs: OnArgs) => void;
-  onError?: (onArgs: OnArgs) => void;
+type UseActionFeedbackOptions<T = unknown> = {
+  onSuccess?: (onArgs: OnArgs<T>) => void;
+  onError?: (onArgs: OnArgs<T>) => void;
 };
 
-const useActionFeedback = (
-  actionState: ActionState,
-  options: UseActionFeedbackOptions
+const useActionFeedback = <T = unknown,>(
+  actionState: ActionState<T>,
+  options: UseActionFeedbackOptions<T>
 ) => {
   const prevTimestamp = useRef(actionState.timestamp);
   const isUpdate = prevTimestamp.current !== actionState.timestamp;

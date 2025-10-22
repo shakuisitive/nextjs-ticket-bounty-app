@@ -1,16 +1,15 @@
 "use client";
 
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import { CardCompact } from "@/components/card-compact";
-import { Button } from "@/components/ui/button";
+import { PaginatedData } from "@/types/pagination";
 import { getComments } from "../queries/get-comments";
 import { CommentWithMetadata } from "../types";
 import { CommentCreateForm } from "./comment-create-form";
 import { CommentDeleteButton } from "./comment-delete-button";
 import { CommentItem } from "./comment-item";
-import { PaginatedData } from "@/types/pagination";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
 
 type CommentsProps = {
   ticketId: string;
@@ -20,7 +19,7 @@ type CommentsProps = {
 const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
   const queryKey = ["comments", ticketId];
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey,
       queryFn: ({ pageParam }) => getComments(ticketId, pageParam),

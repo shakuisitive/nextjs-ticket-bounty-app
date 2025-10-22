@@ -23,7 +23,11 @@ const CommentCreateForm = ({
   const [actionState, action] = useActionState(
     createComment.bind(null, ticketId),
     EMPTY_ACTION_STATE
-  );
+  ) as [
+    ActionState<CommentWithMetadata | undefined>,
+    (payload: FormData) => void,
+    boolean
+  ];
 
   const handleSuccess = (
     actionState: ActionState<CommentWithMetadata | undefined>

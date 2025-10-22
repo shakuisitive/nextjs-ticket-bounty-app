@@ -1,7 +1,7 @@
 import { SelectValue } from "@radix-ui/react-select";
+import { PaginatedData } from "@/types/pagination";
 import { Button } from "./ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
-import { PaginatedData } from "@/types/pagination";
 
 type PageAndSize = {
   size: number;

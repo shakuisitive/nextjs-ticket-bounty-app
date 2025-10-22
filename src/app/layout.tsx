@@ -2,11 +2,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { ReactQueryProvider } from "@/_providers/react-query/react-query-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Header } from "./_navigation/header";
 import { Sidebar } from "./_navigation/sidebar/components/sidebar";
-import { ReactQueryProvider } from "@/_providers/react-query/react-query-provider";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
