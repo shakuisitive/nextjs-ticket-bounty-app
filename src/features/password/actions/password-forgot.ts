@@ -1,4 +1,6 @@
 "use server";
+
+import { generatePasswordResetLink } from "./../utils/generate-password-reset-link";
 import { z } from "zod";
 import {
   fromErrorToActionState,
@@ -23,6 +25,10 @@ export const passwordForgot = async (
     });
 
     if (!user) return toActionState("ERROR", "Invalid email", formData);
+
+    const passwordResetLink = await generatePasswordResetLink(user.id);
+
+    console.log(passwordResetLink);
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }

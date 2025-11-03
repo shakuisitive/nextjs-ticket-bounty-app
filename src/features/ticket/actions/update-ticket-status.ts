@@ -9,7 +9,7 @@ import {
 import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
-import { isOwner } from "./../../auth/utils/is-owner";
+import { isOwner } from "@/features/auth/utils/is-owner";
 
 export const updateTicketStatus = async (id: string, status: TicketStatus) => {
   const { user } = await getAuthOrRedirect();
