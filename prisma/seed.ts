@@ -1,4 +1,4 @@
-import { hash } from "@node-rs/argon2";
+import { hashPassword } from "@/features/password/utils/hash-and-verify";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -46,7 +46,7 @@ const seed = async () => {
   await prisma.ticket.deleteMany();
   await prisma.user.deleteMany();
 
-  const passwordHash = await hash("shakirkhan72727@gmail.com");
+  const passwordHash = await hashPassword("shakirkhan72727@gmail.com");
 
   const [createdUser] = await prisma.user.createManyAndReturn({
     data: users.map((user) => ({ ...user, passwordHash })),

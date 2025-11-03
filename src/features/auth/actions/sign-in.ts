@@ -11,6 +11,7 @@ import { ActionState } from "@/components/form/utils/to-action-state";
 import { lucia } from "@/lib/lucia";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
+import { verifyPasswordHash } from "@/features/password/utils/hash-and-verify";
 
 const signInSchema = z.object({
   email: z.string().min(1, { message: "Is required" }).max(191).email(),
@@ -29,7 +30,7 @@ export const signIn = async (actionState: ActionState, formData: FormData) => {
 
     if (!user) return toActionState("ERROR", "Invalid credentials", formData);
 
-    const validPassword = await verify(user.passwordHash, password);
+    const validPassword = await verifyPasswordHash(user.passwordHash, password);
 
     if (!validPassword)
       return toActionState("ERROR", "Invalid credentials", formData);
