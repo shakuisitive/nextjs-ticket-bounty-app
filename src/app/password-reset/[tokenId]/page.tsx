@@ -1,11 +1,13 @@
 import { CardCompact } from "@/components/card-compact";
 import { PasswordResetForm } from "@/features/password/components/password-reset-form";
 
-const PasswordResetPage = async ({
-  params,
-}: {
-  params: Promise<{ tokenId: string }>;
-}) => {
+type PasswordResetPageProps = {
+  params: Promise<{
+    tokenId: string;
+  }>;
+};
+
+const PasswordResetPage = async ({ params }: PasswordResetPageProps) => {
   const { tokenId } = await params;
 
   return (

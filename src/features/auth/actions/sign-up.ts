@@ -1,6 +1,5 @@
 "use server";
 
-import { hash } from "@node-rs/argon2";
 import { Prisma } from "@prisma/client";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -10,10 +9,10 @@ import {
   fromErrorToActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
+import { hashPassword } from "@/features/password/utils/hash-and-verify";
 import { lucia } from "@/lib/lucia";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
-import { hashPassword } from "@/features/password/utils/hash-and-verify";
 
 const signUpSchema = z
   .object({
