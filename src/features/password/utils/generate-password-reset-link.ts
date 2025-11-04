@@ -12,7 +12,7 @@ export const generatePasswordResetLink = async (userId: string) => {
   const pageUrl = getBaseUrl() + passwordResetPath();
   const passwordResetLink = `${pageUrl}/${tokenHash}`;
 
-  prisma.passwordResetToken.create({
+  await prisma.passwordResetToken.create({
     data: {
       tokenHash,
       expiresAt: new Date(Date.now() + PASSWORD_RESET_TOKEN_LIFETIME_MS),

@@ -33,12 +33,12 @@ export const passwordReset = async (
   actionState: ActionState,
   formData: FormData
 ) => {
+  const tokenHash = tokenId;
+
   try {
     const { password } = passwordResetSchema.parse(
       Object.fromEntries(formData)
     );
-
-    const tokenHash = hashToken(tokenId);
 
     const passwordResetToken = await prisma.passwordResetToken.findUnique({
       where: {
