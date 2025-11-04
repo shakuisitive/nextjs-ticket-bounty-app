@@ -1,11 +1,17 @@
 "use server";
 
 import { z } from "zod";
-import { fromErrorToActionState } from "@/components/form/utils/to-action-state";
+import {
+  fromErrorToActionState,
+  toActionState,
+} from "@/components/form/utils/to-action-state";
 import { ActionState } from "@/components/form/utils/to-action-state";
 import { signInPath } from "@/paths";
 import { redirect } from "next/navigation";
 import { setCookieByKey } from "@/actions/cookies";
+import { prisma } from "@/lib/prisma";
+import { hashToken } from "@/utils/crypto";
+import { hashPassword } from "../utils/hash-and-verify";
 
 const passwordResetSchema = z
   .object({
@@ -31,6 +37,40 @@ export const passwordReset = async (
     const { password } = passwordResetSchema.parse(
       Object.fromEntries(formData)
     );
+
+    const tokenHash = hashToken(tokenId);
+
+    const passwordResetToken = await prisma.passwordResetToken.findUnique({
+      where: {
+        tokenHash,
+      },
+    });
+
+    if (
+      !passwordResetToken ||
+      Date.now() > passwordResetToken.expiresAt.getTime()
+    ) {
+      return toActionState("ERROR", "Invalid or expired token", formData);
+    }
+
+    await prisma.session.deleteMany({
+      where: { id: passwordResetToken.userId },
+    });
+
+    if (passwordResetToken) {
+      await prisma.passwordResetToken.delete({
+        where: {
+          tokenHash,
+        },
+      });
+    }
+
+    const passwordHash = await hashPassword(password);
+
+    await prisma.user.update({
+      where: { id: passwordResetToken.userId },
+      data: { passwordHash },
+    });
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }
