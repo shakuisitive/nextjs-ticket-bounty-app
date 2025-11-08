@@ -19,8 +19,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "The Road to Next",
-  description: "My Road to Next application ...",
+  title: "TicketBounty",
+  description: "TicketBounty Next application ...",
 };
 
 export default function RootLayout({

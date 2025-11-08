@@ -1,7 +1,7 @@
-import { Heading } from "@/components/heading";
-import { AccountTables } from "../_navigation/tabs";
 import { CardCompact } from "@/components/card-compact";
+import { Heading } from "@/components/heading";
 import { PasswordChangeForm } from "@/features/password/components/password-change-form";
+import { AccountTables } from "../_navigation/tabs";
 
 const PasswordPage = () => {
   return (
