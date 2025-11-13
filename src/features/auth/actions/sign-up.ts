@@ -1,7 +1,6 @@
 "use server";
 
 import { Prisma } from "@prisma/client";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import {
@@ -10,9 +9,12 @@ import {
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import { hashPassword } from "@/features/password/utils/hash-and-verify";
-import { lucia } from "@/lib/lucia";
+import { createSession } from "@/lib/lucia";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
+import { generateRandomToken } from "@/utils/crypto";
+import { generateEmailVerificationCode } from "../utils/generate-email-verification-code";
+import { setSessionCookie } from "../utils/session-cookie";
 
 const signUpSchema = z
   .object({
@@ -22,13 +24,9 @@ const signUpSchema = z
       .max(191)
       .refine(
         (value) => !value.includes(" "),
-        "Username cannot contain spaces."
+        "Username cannot contain spaces"
       ),
-    email: z
-      .string()
-      .email()
-      .min(1, { message: "A valid is required" })
-      .max(191),
+    email: z.string().min(1, { message: "Is required" }).max(191).email(),
     password: z.string().min(6).max(191),
     confirmPassword: z.string().min(6).max(191),
   })
@@ -36,13 +34,13 @@ const signUpSchema = z
     if (password !== confirmPassword) {
       ctx.addIssue({
         code: "custom",
-        message: "Password do not match",
+        message: "Passwords do not match",
         path: ["confirmPassword"],
       });
     }
   });
 
-export const signUp = async (actionState: ActionState, formData: FormData) => {
+export const signUp = async (_actionState: ActionState, formData: FormData) => {
   try {
     const { username, email, password } = signUpSchema.parse(
       Object.fromEntries(formData)
@@ -58,15 +56,16 @@ export const signUp = async (actionState: ActionState, formData: FormData) => {
       },
     });
 
-    const session = await lucia.createSession(user.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-
-    const cookieStore = await cookies();
-    cookieStore.set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
+    const verificationCode = await generateEmailVerificationCode(
+      user.id,
+      email
     );
+    console.log(verificationCode);
+
+    const sessionToken = generateRandomToken();
+    const session = await createSession(sessionToken, user.id);
+
+    await setSessionCookie(sessionToken, session.expiresAt);
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
