@@ -1,5 +1,8 @@
-export function htmlTemplate(username: string, passwordResetLink: string){
-return `
+export function emailPasswordReset(
+  username: string,
+  passwordResetLink: string
+) {
+  return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,5 +96,5 @@ return `
     </table>
 </body>
 </html>
-`
+`;
 }
