@@ -1,27 +1,22 @@
 "use client";
 
 import { useActionState } from "react";
-import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
-import { emailVerification } from "../actions/email-verification";
-import { InputOTPComponent } from "./input-otp";
+import { emailVerificationResend } from "../actions/email-verification-resend";
 
-const EmailVerificationForm = () => {
+const EmailVerificationResendForm = () => {
   const [actionState, action] = useActionState(
-    emailVerification,
+    emailVerificationResend,
     EMPTY_ACTION_STATE
   );
 
   return (
     <Form action={action} actionState={actionState}>
-      <InputOTPComponent />
-      <FieldError actionState={actionState} name="code" />
-
-      <SubmitButton label="Verify Email" />
+      <SubmitButton label="Resend Code" variant="ghost" />
     </Form>
   );
 };
 
-export { EmailVerificationForm };
+export { EmailVerificationResendForm };
