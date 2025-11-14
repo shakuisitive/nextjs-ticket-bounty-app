@@ -16,6 +16,7 @@ import { generateRandomToken } from "@/utils/crypto";
 import { generateEmailVerificationCode } from "../utils/generate-email-verification-code";
 import { setSessionCookie } from "../utils/session-cookie";
 import { sendEmailVerification } from "../emails/send-email-verification";
+import { inngest } from "@/lib/inngest";
 
 const signUpSchema = z
   .object({
@@ -57,13 +58,19 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
       },
     });
 
-    const verificationCode = await generateEmailVerificationCode(
-      user.id,
-      email
-    );
-    console.log({ verificationCode });
+    // const verificationCode = await generateEmailVerificationCode(
+    //   user.id,
+    //   email
+    // );
 
-    await sendEmailVerification(user.username, user.email, verificationCode);
+    // await sendEmailVerification(user.username, user.email, verificationCode);
+
+    await inngest.send({
+      name: "app/auth.sign-up",
+      data: {
+        userId: user.id,
+      }
+    })
 
     const sessionToken = generateRandomToken();
     const session = await createSession(sessionToken, user.id);
