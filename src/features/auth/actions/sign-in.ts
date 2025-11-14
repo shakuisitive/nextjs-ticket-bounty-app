@@ -1,23 +1,25 @@
 "use server";
-import { cookies } from "next/headers";
+
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import {
+  ActionState,
   fromErrorToActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
-import { ActionState } from "@/components/form/utils/to-action-state";
 import { verifyPasswordHash } from "@/features/password/utils/hash-and-verify";
-import { lucia } from "@/lib/lucia";
+import { createSession } from "@/lib/lucia";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
+import { generateRandomToken } from "@/utils/crypto";
+import { setSessionCookie } from "../utils/session-cookie";
 
 const signInSchema = z.object({
   email: z.string().min(1, { message: "Is required" }).max(191).email(),
   password: z.string().min(6).max(191),
 });
 
-export const signIn = async (actionState: ActionState, formData: FormData) => {
+export const signIn = async (_actionState: ActionState, formData: FormData) => {
   try {
     const { email, password } = signInSchema.parse(
       Object.fromEntries(formData)
@@ -27,23 +29,20 @@ export const signIn = async (actionState: ActionState, formData: FormData) => {
       where: { email },
     });
 
-    if (!user) return toActionState("ERROR", "Invalid credentials", formData);
+    if (!user) {
+      return toActionState("ERROR", "Incorrect email or password", formData);
+    }
 
     const validPassword = await verifyPasswordHash(user.passwordHash, password);
 
-    if (!validPassword)
-      return toActionState("ERROR", "Invalid credentials", formData);
+    if (!validPassword) {
+      return toActionState("ERROR", "Incorrect email or password", formData);
+    }
 
-    const session = await lucia.createSession(user.id, {});
-    const sessionCookie = await lucia.createSessionCookie(session.id);
+    const sessionToken = generateRandomToken();
+    const session = await createSession(sessionToken, user.id);
 
-    const cookieStore = await cookies();
-
-    cookieStore.set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    );
+    await setSessionCookie(sessionToken, session.expiresAt);
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }
